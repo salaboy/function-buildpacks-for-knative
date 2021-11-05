@@ -1,16 +1,10 @@
 name: Makefile CI
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request]
 
 jobs:
-  build:
-
+  build-and-test:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     
@@ -28,9 +22,8 @@ jobs:
       with:
         go-version: '1.17.0'
     - run: go version
-
       
-    - name: Install dependencies
+    - name: Install Dependencies
       run: make
       
     - name: Run Buildpack Tests
@@ -39,8 +32,11 @@ jobs:
     - name: Make Builder
       run: make builder
       
+    - name: Make Test Images
+      run: make test-images 
+      
     - name: Run Smoke Tests
-      run: make test-images smoke-test
+      run: make smoke-test
       
 #     - name: Build and Publish
 #       run: make publish
